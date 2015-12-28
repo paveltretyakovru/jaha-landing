@@ -1,0 +1,92 @@
+/* CSS Document */
+html{ height: 100% }
+
+body{
+	background-color: #fff;
+	height:100%;
+}
+
+/* HEADER */
+header{ 
+	/*border:1px solid red;*/
+}
+header nav{
+	display: flex;
+	justify-content: space-between;
+	height: 20px;
+	font-family: 'texgyreadventorbold';
+}
+
+header nav .nav-logo-side{
+	display : flex;
+	align-items:center;
+	text-transform:uppercase;
+	font-size:14px;
+	color:#434A55;
+}
+	header nav .nav-logo-side img{
+		height : 20px;
+	}
+
+header nav .nav-right-side{
+	display:flex;
+	align-items:center;
+	text-transform:uppercase;
+	color:#434A55;
+}
+
+	header nav .nav-right-side img{
+		margin: 0px 4px;
+		height : 16px;
+	}
+
+	header nav .nav-right-side span{
+		font-size:12px;
+	}
+	
+	header nav .nav-right-side-seperator{
+		width : 0px;
+		border: 1px solid #E6E6E6;
+		height:16px;
+	}
+		
+/* FIRST SECTION */
+section{ 
+	/*border: 1px solid green*/
+}
+section#first-section{
+	height: 90%;
+}
+
+	section#first-section .front{
+		z-index:999;
+		width:100%;
+		position:absolute;
+		text-align:center;
+	}
+
+	section#first-section .front img{
+		width : 126px;
+	}
+
+	section#first-section .back{
+		height: 100%;
+		width: 100%;
+	}
+
+	section#first-section .back img{
+		border : 1px solid red;
+		/*border-radius:50px;*/
+	}
+
+	section#first-section .back .th{
+		width : 70px;
+		/*height : 100px;*/
+		/*float: left;*/
+		position: absolute;
+	}
+
+/* FOOTER */
+footer{
+	/*border : 1px solid blue;*/
+}

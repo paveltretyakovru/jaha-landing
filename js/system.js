@@ -2,7 +2,7 @@
 $(document).ready(function( ) { 
 	'use strict';
 	var starty 		= 50; 
-	var startx 		= -100;
+	var startx 		= 0;
 	var $elements	= $('.th');
 
 	$elements.each( function( index , el ) {

@@ -9,59 +9,9 @@ $(document).ready(function( ) {
 	//@return {bool} 		генерации буля для положения нового изображения выше(true) или ниже(false) предыдущего
 	var getRandomRelative 	= function(){ return getRandomInteger( 0 , 1 ); }
 
-	/**
-	 * GLOBALS VARIABLES
-	 */
-
-	// Установочные параметры
-	var _DEBUG_		= true; 				// Создавать ли переменные для дебага
-	var _STARTY_	= -300; 					// Минимальное значение "y" откуда будут падать картинки
-	var _STARTX_	= 50;					// Минимальное значение "х" откуда будут падать картинки
-	var _RATIOMIN_	= 1.0;					// Минимальный коэфицент измнения размера изображения
-	var _RATIOMAX_	= 1.5;					// Максимальные коэфицент изменения размера изображения
-	var _$ELEMENTS_	= $('.th');				// JQuery селектор к которм будет привязана гравитация
-	var _$PARENT_	= $('.back');
-	var _$AREAELEM_ = $('#first-section');
-	var _MARGIN_ 	= 3;					// Свободное пространство между элементами
-	
-	// Вычисляемые параметры, кэшируем их
-	var _COUNTELEMENTS_	= _$ELEMENTS_.length;								// Вычисление количества элементров
-	var _WIDTHWINDOW_ 	= $(window).width();								// Ширина окна
-	var _LEFTINTERVAL_ 	= [ _STARTX_ , Math.floor( _WIDTHWINDOW_ / 2 ) ]; 	// Вычисление легово промежутка координат x 
-	var _RIGHTINTERVAL_	= [ _LEFTINTERVAL_[ 1 ] , _WIDTHWINDOW_ ]; 			// Вычсиление правого промежутка кординат y
-	var _COUNTLEFT_		= Math.floor( _COUNTELEMENTS_ / 2 );				// Количество элементов слева
-	var _COUNTRIGHT_ 	= Math.ceil( _COUNTELEMENTS_ / 2 );					// Количество элементов справа
-	var _PARENTHEIGHT_	= _$PARENT_.height();
-	
-	// Опции для плагина гравитации
-	var gravity_options	= {
-		gravity 		: { x:0 , y:1 } ,
-		shape 			: 'circle' ,
-		// containment 	: 'parent'		,
-		containment 	: [
-			15 							, // x1
-			-300 						, // y1
-			$(window).width()-15 			, // x2
-			$('#first-section').offset().top + $('#first-section').height() 	, // y2
-		]
-	}
-
 	var getTop = function( index , el_width , prev_pos , prev_height ){
 		if( index == 0 || index == _COUNTLEFT_ ){ return _STARTY_ }
-		var top;
-		var relative = getRandomRelative();
-
-		function toTop(){ return prev_pos.top - el_width - _MARGIN_; }
-		function toBottom(){ return prev_pos.top + prev_height + _MARGIN_; }
-
-		if ( relative ) {
-			top = toTop();
-			return ( top <= 0 ) ? toBottom() : top;
-		} else {
-			top = toBottom();
-			return ( top + el_width >= _PARENTHEIGHT_ ) ? toTop() : top;
-		}
-
+		return ( getRandomRelative() ) ? prev_pos.top - el_width - _MARGIN_ : prev_pos.top + prev_height + _MARGIN_;
 	}
 
 	var getLeft = function( index , el_width , prev_pos , prev_width ){
@@ -71,8 +21,6 @@ $(document).ready(function( ) {
 		var left 	= getRandomInteger( can_min , can_max );
 
 		return ( _WIDTHWINDOW_ <= left + el_width ) ? can_min : left;
-
-		return left;
 	}
 
 	var putElement = function( $el , index ){
@@ -86,27 +34,49 @@ $(document).ready(function( ) {
 
 		$el.css( { top : top , left : left  , width : new_width + 'px' } );
 	}
+	
+	/**
+	 * GLOBALS VARIABLES
+	 */
 
-	// Установка параметров для изображений левого края
-	for( var i = 0; i < _COUNTELEMENTS_; i++ ){
-		var $el;
-
-		$el = _$ELEMENTS_.eq( i ); 
-		putElement( $el , i );
-
-		console.log('ELEMENT' , $el)
+	// Установочные параметры
+	var _DEBUG_		= true; 				// Создавать ли переменные для дебага
+	var _STARTY_	= -200; 				// Минимальное значение "y" откуда будут падать картинки
+	var _STARTX_	= 50;					// Минимальное значение "х" откуда будут падать картинки
+	var _RATIOMIN_	= 1.0;					// Минимальный коэфицент измнения размера изображения
+	var _RATIOMAX_	= 1.5;					// Максимальные коэфицент изменения размера изображения
+	var _$ELEMENTS_	= $('.th');				// JQuery селектор к которм будет привязана гравитация
+	var _$AREAELEM_ = $('#first-section');	// Элемент вниз которого будут ложиться элементы
+	var _MARGIN_ 	= 3;					// Свободное пространство между элементами
+	
+	// Вычисляемые параметры, кэшируем их
+	var _COUNTELEMENTS_	= _$ELEMENTS_.length;								// Вычисление количества элементров
+	var _WIDTHWINDOW_ 	= $(window).width();								// Ширина окна
+	var _LEFTINTERVAL_ 	= [ _STARTX_ , Math.floor( _WIDTHWINDOW_ / 2 ) ]; 	// Вычисление легово промежутка координат x 
+	var _RIGHTINTERVAL_	= [ _LEFTINTERVAL_[ 1 ] , _WIDTHWINDOW_ ]; 			// Вычсиление правого промежутка кординат y
+	var _COUNTLEFT_		= Math.floor( _COUNTELEMENTS_ / 2 );				// Количество элементов слева
+	var _COUNTRIGHT_ 	= Math.ceil( _COUNTELEMENTS_ / 2 );					// Количество элементов справа
+	
+	// Опции для плагина гравитации
+	var _GRAVITY_		= {
+		gravity 		: { x:0 , y:1 } ,
+		shape 			: 'circle' ,
+		containment 	: [
+			15 												, // x1
+			_STARTY_ + ( -400 )								, // y1
+			_WIDTHWINDOW_ - 15 								, // x2
+			_$AREAELEM_.offset().top + _$AREAELEM_.height() , // y2
+		]
 	}
 
-	var tmp = 400;
-	var parent_height 	= $('header').height() + $('#first-section').height() + $('footer').height();
-	var parent_top 		= $('footer').height();
-	_$PARENT_.css({
-		height 	: '100%' ,
-		// top 	: '-' + parent_top + 'px'
-		// bottom : $('footer').height()
-	});
+	// Расставляем элементы
+	for( var i = 0; i < _COUNTELEMENTS_; i++ ){
+		var $el = _$ELEMENTS_.eq( i ); 
+		putElement( $el , i );
+	}
 
-	_$ELEMENTS_.throwable( gravity_options );
+	// Инициализируем гравитацию
+	_$ELEMENTS_.throwable( _GRAVITY_ );
 
 	/**
 	 * _DEBUG_ variables

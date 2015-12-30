@@ -8,11 +8,8 @@ body{
 	background-color: #F6F7FB;
 }
 
-
 /* HEADER */
-header{ 
-	/*border:1px solid red;*/
-	z-index: 1;
+header{
 	background-color: #fff;
 }
 header nav{
@@ -56,16 +53,14 @@ header nav .nav-right-side{
 	}
 		
 /* FIRST SECTION */
-section{ 
-	/*border: 1px solid green*/
-}
+
 section#first-section{
 	height: 80%;
 	background-color: #fff;
 }
 
 	section#first-section .front{
-		z-index:999;
+		z-index:1;
 		width:100%;
 		position:absolute;
 		text-align:center;
@@ -95,27 +90,12 @@ section#first-section{
 		margin-top: 40px;
 	}
 
-	/*.back{
-		width: 100%;
-		z-index: 998;
-		position: absolute;
-		top: -200;
-	}
-
-	.back img{
-		z-index: 998;
-	}*/
-
-	.th{
-		/*width : 70px;*/
-		/*height : 100px;*/
-		/*float: left;*/
-		position: absolute;
-	}
+.th{
+	position: absolute;
+}
 
 /* FOOTER */
 footer{
-	/*border : 1px solid blue;*/
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -124,7 +104,6 @@ footer{
 	font-size: 14px;
 	color: #AAB2BE;
 	background-color: #F6F7FB;
-	/*height: 50px;*/
 }
 
 footer a{

@@ -35,6 +35,31 @@ $(document).ready(function( ) {
 		$el.css( { top : top , left : left  , width : new_width + 'px' } );
 		$el.find('img').width( new_width );
 	}
+
+
+	// ### WAIT IMAGES LOADED ###
+	// Загрузив шаблон на сервер, изображения не хотят скачиваться
+	// поэтому подключаю скрипт для ожидания загрузки изображений
+	function preloadImages(srcs, imgs, callback) {
+	    var img;
+	    var remaining = srcs.length;
+	    for (var i = 0; i < srcs.length; i++) {
+	        img = new Image();
+	        img.onload = function() {
+	            --remaining;
+	            if (remaining <= 0) {
+	                callback();
+	            }
+	        };
+	        img.src = srcs[i];
+	        imgs.push(img);
+	    }
+	}
+
+	// then to call it, you would use this
+	var imageSrcs = [];
+	var images = [];
+	// ### END IMAGES LOADED WAIT ### //
 	
 	/**
 	 * GLOBALS VARIABLES
@@ -72,12 +97,19 @@ $(document).ready(function( ) {
 
 	// Расставляем элементы
 	for( var i = 0; i < _COUNTELEMENTS_; i++ ){
-		var $el = _$ELEMENTS_.eq( i ); 
+		var $el = _$ELEMENTS_.eq( i );
 		putElement( $el , i );
+
+		// Заполняет массив для предзагрузки
+		imageSrcs.push( $el.find('img').attr('src') );
 	}
 
-	// Инициализируем гравитацию
-	_$ELEMENTS_.throwable( _GRAVITY_ );
+
+	preloadImages(imageSrcs, images, function(){
+		console.log('Load images finished' , imageSrcs );
+		// Инициализируем гравитацию
+		_$ELEMENTS_.throwable( _GRAVITY_ );
+	});
 
 	/**
 	 * _DEBUG_ variables

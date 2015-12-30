@@ -33,6 +33,7 @@ $(document).ready(function( ) {
 		var left 		= getLeft( index , new_width , prev_pos , prev_height ) + 'px';
 
 		$el.css( { top : top , left : left  , width : new_width + 'px' } );
+		$el.find('img').width( new_width );
 	}
 	
 	/**

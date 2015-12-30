@@ -40,20 +40,18 @@ $(document).ready(function( ) {
 	 * @param  {IMG ELEMENT}
 	 * @return {void} вставляет после body новые элемент <div class="th"><img src="..." /></div>
 	 */
-	var createGravityElement = function( image ){
+	var createGravityElement = function( Image ){
 		var Before , Div;
 		Before = Div = null;
 
 		Div 			= document.createElement( 'div' );
 		Div.className 	= 'th';
-		Div.appendChild( image );
+		Div.appendChild( Image );
 		document.body.insertBefore( Div , Before );
 	}
 
-
-	// ### WAIT IMAGES LOADED ###
 	// Загрузив шаблон на сервер, изображения не хотят скачиваться
-	// поэтому подключаю скрипт для ожидания загрузки изображений
+	// поэтому создаем функцию для ожидания загрузки изображений
 	function preloadImages(srcs, imgs, callback) {
 	    var img;
 	    var remaining = srcs.length;
@@ -69,8 +67,6 @@ $(document).ready(function( ) {
 	        imgs.push(img);
 	    }
 	}
-
-	// ### END IMAGES LOADED WAIT ### //
 	
 	/**
 	 * GLOBALS VARIABLES
@@ -78,7 +74,7 @@ $(document).ready(function( ) {
 
 	// Установочные параметры
 	// then to call it, you would use this
-	var _IMAGESRCS_ = [ 
+	var _IMAGESRCS_ = [ 					// Массив с изображениями которые необходимо будет подгрузить
 		"images/stats/stat-01.png" ,
 		"images/stats/stat-02.png" ,
 		"images/stats/stat-03.png" ,
@@ -95,14 +91,15 @@ $(document).ready(function( ) {
 		"images/stats/stat-14.png" ,
 		"images/stats/stat-15.png"
 	];
-	var _LOADEDIMAGES_ = [];
+	var _LOADEDIMAGES_ = [];				// Массив загруженных изображений
 
 	var _DEBUG_		= true; 				// Создавать ли переменные для дебага
 	var _STARTY_	= -200; 				// Минимальное значение "y" откуда будут падать картинки
 	var _STARTX_	= 50;					// Минимальное значение "х" откуда будут падать картинки
 	var _RATIOMIN_	= 1.0;					// Минимальный коэфицент измнения размера изображения
 	var _RATIOMAX_	= 1.5;					// Максимальные коэфицент изменения размера изображения
-	var _$ELEMENTS_	= $('.th');				// JQuery селектор к которм будет привязана гравитация
+	var _ELEMENTS_ 	= '.th'					// К какому селектору применять гравитацию
+	var _$ELEMENTS_	= {}					// JQuery селектор к которм будет привязана гравитация
 	var _$AREAELEM_ = $('#first-section');	// Элемент вниз которого будут ложиться элементы
 	var _MARGIN_ 	= 3;					// Свободное пространство между элементами
 	
@@ -126,17 +123,16 @@ $(document).ready(function( ) {
 		]
 	}
 
+	// !!!!! INITIALIZE !!!!!
 	// Вначале загружаем все изображения
 	preloadImages(_IMAGESRCS_, _LOADEDIMAGES_, function(){
-		console.log('Load images finished' , _IMAGESRCS_ );
-
 		// Вставляем загруженные изображения в dom
 		for( var i = 0; i < _COUNTELEMENTS_; i++ ){
 			createGravityElement( _LOADEDIMAGES_[ i ] );
 		}
 
 		// Делаем новые выборку элементов
-		_$ELEMENTS_	= $('.th');
+		_$ELEMENTS_	= $( _ELEMENTS_ );
 		
 		// Расставляем элементы
 		for( var i = 0; i < _COUNTELEMENTS_; i++ ){

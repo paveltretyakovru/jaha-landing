@@ -33,7 +33,21 @@ $(document).ready(function( ) {
 		var left 		= getLeft( index , new_width , prev_pos , prev_height ) + 'px';
 
 		$el.css( { top : top , left : left  , width : new_width + 'px' } );
-		$el.find('img').width( new_width );
+		$el.find( 'img' ).width( new_width );
+	}
+
+	/**
+	 * @param  {IMG ELEMENT}
+	 * @return {void} вставляет после body новые элемент <div class="th"><img src="..." /></div>
+	 */
+	var createGravityElement = function( image ){
+		var Before , Div;
+		Before = Div = null;
+
+		Div 			= document.createElement( 'div' );
+		Div.className 	= 'th';
+		Div.appendChild( image );
+		document.body.insertBefore( Div , Before );
 	}
 
 
@@ -56,9 +70,6 @@ $(document).ready(function( ) {
 	    }
 	}
 
-	// then to call it, you would use this
-	var imageSrcs = [];
-	var images = [];
 	// ### END IMAGES LOADED WAIT ### //
 	
 	/**
@@ -66,6 +77,26 @@ $(document).ready(function( ) {
 	 */
 
 	// Установочные параметры
+	// then to call it, you would use this
+	var _IMAGESRCS_ = [ 
+		"images/stats/stat-01.png" ,
+		"images/stats/stat-02.png" ,
+		"images/stats/stat-03.png" ,
+		"images/stats/stat-04.png" ,
+		"images/stats/stat-05.png" ,
+		"images/stats/stat-06.png" ,
+		"images/stats/stat-07.png" ,
+		"images/stats/stat-08.png" ,
+		"images/stats/stat-09.png" ,
+		"images/stats/stat-10.png" ,
+		"images/stats/stat-11.png" ,
+		"images/stats/stat-12.png" ,
+		"images/stats/stat-13.png" ,
+		"images/stats/stat-14.png" ,
+		"images/stats/stat-15.png"
+	];
+	var _LOADEDIMAGES_ = [];
+
 	var _DEBUG_		= true; 				// Создавать ли переменные для дебага
 	var _STARTY_	= -200; 				// Минимальное значение "y" откуда будут падать картинки
 	var _STARTX_	= 50;					// Минимальное значение "х" откуда будут падать картинки
@@ -76,7 +107,7 @@ $(document).ready(function( ) {
 	var _MARGIN_ 	= 3;					// Свободное пространство между элементами
 	
 	// Вычисляемые параметры, кэшируем их
-	var _COUNTELEMENTS_	= _$ELEMENTS_.length;								// Вычисление количества элементров
+	var _COUNTELEMENTS_	= _IMAGESRCS_.length;								// Вычисление количества элементров
 	var _WIDTHWINDOW_ 	= $(window).width();								// Ширина окна
 	var _LEFTINTERVAL_ 	= [ _STARTX_ , Math.floor( _WIDTHWINDOW_ / 2 ) ]; 	// Вычисление легово промежутка координат x 
 	var _RIGHTINTERVAL_	= [ _LEFTINTERVAL_[ 1 ] , _WIDTHWINDOW_ ]; 			// Вычсиление правого промежутка кординат y
@@ -95,18 +126,24 @@ $(document).ready(function( ) {
 		]
 	}
 
-	// Расставляем элементы
-	for( var i = 0; i < _COUNTELEMENTS_; i++ ){
-		var $el = _$ELEMENTS_.eq( i );
-		putElement( $el , i );
+	// Вначале загружаем все изображения
+	preloadImages(_IMAGESRCS_, _LOADEDIMAGES_, function(){
+		console.log('Load images finished' , _IMAGESRCS_ );
 
-		// Заполняет массив для предзагрузки
-		imageSrcs.push( $el.find('img').attr('src') );
-	}
+		// Вставляем загруженные изображения в dom
+		for( var i = 0; i < _COUNTELEMENTS_; i++ ){
+			createGravityElement( _LOADEDIMAGES_[ i ] );
+		}
 
+		// Делаем новые выборку элементов
+		_$ELEMENTS_	= $('.th');
+		
+		// Расставляем элементы
+		for( var i = 0; i < _COUNTELEMENTS_; i++ ){
+			var $el = _$ELEMENTS_.eq( i );
+			putElement( $el , i );
+		}
 
-	preloadImages(imageSrcs, images, function(){
-		console.log('Load images finished' , imageSrcs );
 		// Инициализируем гравитацию
 		_$ELEMENTS_.throwable( _GRAVITY_ );
 	});
